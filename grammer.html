@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 3 English - 5 Practice Sets</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: Arial, sans-serif;
+  background: #cfe8f7;
+  text-align: center;
+  padding: 18px;
+  margin: 0;
+  color: #304052;
+}
+
+h2 { color: #304b68; }
+
+.box {
+  background: white;
+  padding: 22px;
+  border-radius: 15px;
+  max-width: 600px;
+  margin: 15px auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+select {
+  padding: 12px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 18px;
+}
+
+button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 14px;
+  border-radius: 10px;
+  border: none;
+  background: #fff4b3;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  background: #ffe69a;
+}
+
+button:disabled { cursor: default; }
+
+.option:disabled { opacity: 1; }
+
+.target-word {
+  font-size: 21px;
+  font-weight: bold;
+  color: #2c3e50;
+  background: #e8f4f8;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.clue-text {
+  font-size: 16px;
+  color: #64717d;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+#score {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px;
+}
+
+#progress {
+  background: white;
+  border-radius: 20px;
+  max-width: 600px;
+  margin: 12px auto;
+  height: 12px;
+  overflow: hidden;
+}
+
+#progressBar {
+  background: #8ed6a5;
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s;
+}
+
+#feedback {
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 26px;
+  margin-top: 12px;
+}
+
+.action { background: #b8e0d2; }
+
+.hidden { display: none; }
+</style>
+</head>
+
+<body>
+
+<h2>📚 Grade 3 English Challenge</h2>
+<h3>Verbs • Past Tense • Vocabulary</h3>
+
+<div class="box" id="startBox">
+  <h3>Choose your practice set</h3>
+
+  <select id="setChoice">
+    <option value="0">Set 1</option>
+    <option value="1">Set 2</option>
+    <option value="2">Set 3</option>
+    <option value="3">Set 4</option>
+    <option value="4">Set 5</option>
+  </select>
+
+  <button class="action" onclick="startQuiz()">
+    Start Quiz ▶
+  </button>
+
+  <p>Each set has 10 questions.</p>
+</div>
+
+<div id="game" class="hidden">
+
+  <div id="score">Score: 0 / 10</div>
+
+  <div id="progress">
+    <div id="progressBar"></div>
+  </div>
+
+  <div class="box" id="quiz"></div>
+
+</div>
+
+<div id="result"></div>
+
+<script>
+
+const sets = [
+
+/* SET 1 */
+
+[
+{q:"Yesterday, our family _____ to Rajasthan.",o:["went","go","going"],a:"went"},
+{q:"The musicians _____ a happy song.",o:["played","play","playing"],a:"played"},
+{q:"The friendly man _____ us how to make bangles.",o:["showed","show","showing"],a:"showed"},
+{q:"We _____ hungry after the long journey.",o:["were","are","was"],a:"were"},
+{q:"Finally, we _____ asleep under the quilts.",o:["fell","fall","falls"],a:"fell"},
+{q:"An open space in front of a house with a railing is a _____.",o:["verandah","cellar","chimney"],a:"verandah"},
+{q:"A small door or opening in the floor is a _____.",o:["trapdoor","window","gate"],a:"trapdoor"},
+{q:"To walk in a relaxed way is to _____.",o:["stroll","shout","crawl"],a:"stroll"},
+{q:"A very large, dry area with sand is a _____.",o:["desert","forest","island"],a:"desert"},
+{q:"A person who plays a musical instrument is a _____.",o:["musician","painter","farmer"],a:"musician"}
+],
+
+/* SET 2 */
+
+[
+{q:"Last Sunday, Riya _____ her grandmother.",o:["visited","visits","visiting"],a:"visited"},
+{q:"The children _____ in the park yesterday.",o:["played","play","plays"],a:"played"},
+{q:"My father _____ a delicious meal last night.",o:["cooked","cook","cooking"],a:"cooked"},
+{q:"The baby _____ for two hours.",o:["slept","sleep","sleeps"],a:"slept"},
+{q:"We _____ the beautiful rainbow after the rain.",o:["saw","see","seeing"],a:"saw"},
+{q:"A person who treats sick people is a _____.",o:["doctor","tailor","driver"],a:"doctor"},
+{q:"A place where books are kept for reading is a _____.",o:["library","bakery","garage"],a:"library"},
+{q:"To look at something carefully is to _____.",o:["observe","forget","borrow"],a:"observe"},
+{q:"Something that gives us light at night is a _____.",o:["lamp","pillow","basket"],a:"lamp"},
+{q:"A journey made on foot is a _____.",o:["walk","flight","voyage"],a:"walk"}
+],
+
+/* SET 3 */
+
+[
+{q:"The birds _____ in the sky yesterday morning.",o:["flew","fly","flies"],a:"flew"},
+{q:"Asha _____ a letter to her friend.",o:["wrote","write","writes"],a:"wrote"},
+{q:"The boys _____ the classroom after the activity.",o:["cleaned","clean","cleans"],a:"cleaned"},
+{q:"I _____ my water bottle at home yesterday.",o:["forgot","forget","forgets"],a:"forgot"},
+{q:"The teacher _____ us a story.",o:["told","tell","telling"],a:"told"},
+{q:"A house made of ice is called an _____.",o:["igloo","tent","hut"],a:"igloo"},
+{q:"A person who makes or repairs shoes is a _____.",o:["cobbler","baker","sailor"],a:"cobbler"},
+{q:"To move slowly and quietly is to _____.",o:["creep","race","jump"],a:"creep"},
+{q:"A narrow path for people to walk on is a _____.",o:["footpath","highway","railway"],a:"footpath"},
+{q:"The opposite of noisy is _____.",o:["quiet","bright","rough"],a:"quiet"}
+],
+
+/* SET 4 */
+
+[
+{q:"Mohan _____ his homework before dinner.",o:["finished","finish","finishes"],a:"finished"},
+{q:"The little girl _____ the red ball.",o:["caught","catch","catches"],a:"caught"},
+{q:"We _____ to school by bus yesterday.",o:["went","go","going"],a:"went"},
+{q:"It _____ heavily last night.",o:["rained","rain","raining"],a:"rained"},
+{q:"My mother _____ me a new storybook.",o:["bought","buy","buys"],a:"bought"},
+{q:"A room or space under the roof of a house is an _____.",o:["attic","garden","balcony"],a:"attic"},
+{q:"A person who travels to a new place is a _____.",o:["traveller","teacher","chef"],a:"traveller"},
+{q:"To speak in a very low voice is to _____.",o:["whisper","cheer","announce"],a:"whisper"},
+{q:"A soft covering used on a bed to keep warm is a _____.",o:["blanket","curtain","carpet"],a:"blanket"},
+{q:"The opposite of empty is _____.",o:["full","weak","thin"],a:"full"}
+],
+
+/* SET 5 */
+
+[
+{q:"The family _____ dinner together yesterday.",o:["ate","eat","eating"],a:"ate"},
+{q:"Neha _____ the window because it was cold.",o:["closed","close","closes"],a:"closed"},
+{q:"The dog _____ loudly at the stranger.",o:["barked","bark","barking"],a:"barked"},
+{q:"I _____ my best friend at the market.",o:["met","meet","meeting"],a:"met"},
+{q:"The children _____ their hands after playing.",o:["washed","wash","washes"],a:"washed"},
+{q:"A large building where a king or queen lives is a _____.",o:["palace","cottage","shop"],a:"palace"},
+{q:"A person you know but may not know very well is an _____.",o:["acquaintance","enemy","stranger"],a:"acquaintance"},
+{q:"To breathe out deeply when tired or disappointed is to _____.",o:["sigh","smile","giggle"],a:"sigh"},
+{q:"The lower edge of a roof that sticks out over a wall is the _____.",o:["eaves","floor","ceiling"],a:"eaves"},
+{q:"The opposite of softly is _____.",o:["loudly","slowly","kindly"],a:"loudly"}
+]
+
+];
+
+let currentSet = 0;
+let current = 0;
+let score = 0;
+let currentOptions = [];
+let answered = false;
+let audioCtx = null;
+
+
+// SOUND EFFECTS
+
+function playSound(type) {
+
+  try {
+
+    audioCtx = audioCtx ||
+      new (window.AudioContext || window.webkitAudioContext)();
+
+    if (audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
+
+    const oscillator = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    if (type === "correct") {
+      oscillator.type = "sine";
+      oscillator.frequency.value = 880;
+    }
+    else if (type === "wrong") {
+      oscillator.type = "triangle";
+      oscillator.frequency.value = 190;
+    }
+    else {
+      oscillator.type = "sine";
+      oscillator.frequency.value = 500;
+    }
+
+    gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+
+    gain.gain.exponentialRampToValueAtTime(
+      0.001,
+      audioCtx.currentTime + 0.25
+    );
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.25);
+
+  } catch(e) {}
+
+}
+
+
+// SHUFFLE OPTIONS
+
+function shuffle(array) {
+
+  const arr = [...array];
+
+  for (let i = arr.length - 1; i > 0; i--) {
+
+    let j = Math.floor(Math.random() * (i + 1));
+
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+
+  }
+
+  return arr;
+}
+
+
+// START QUIZ
+
+function startQuiz() {
+
+  currentSet = Number(
+    document.getElementById("setChoice").value
+  );
+
+  current = 0;
+  score = 0;
+
+  document.getElementById("startBox")
+    .classList.add("hidden");
+
+  document.getElementById("result").innerHTML = "";
+
+  document.getElementById("game")
+    .classList.remove("hidden");
+
+  document.getElementById("score").innerText =
+    "Score: 0 / 10";
+
+  loadQuestion();
+
+}
+
+
+// LOAD QUESTION
+
+function loadQuestion() {
+
+  answered = false;
+
+  const qs = sets[currentSet];
+
+  if (current >= qs.length) {
+    showResult();
+    return;
+  }
+
+  const q = qs[current];
+
+  currentOptions = shuffle(q.o);
+
+  let html = `
+    <div class="clue-text">
+      SET ${currentSet + 1} • QUESTION ${current + 1} OF 10
+    </div>
+
+    <div class="target-word">
+      ${q.q}
+    </div>
+  `;
+
+  currentOptions.forEach((option, index) => {
+
+    html += `
+      <button class="option"
+        onclick="checkAnswer(${index})">
+        ${option}
+      </button>
+    `;
+
+  });
+
+  html += `<div id="feedback"></div>`;
+
+  document.getElementById("quiz").innerHTML = html;
+
+  document.getElementById("progressBar").style.width =
+    (current / 10 * 100) + "%";
+
+}
+
+
+// CHECK ANSWER
+
+function checkAnswer(index) {
+
+  if (answered) return;
+
+  answered = true;
+
+  playSound("click");
+
+  const correct = sets[currentSet][current].a;
+  const selected = currentOptions[index];
+
+  const buttons = document.querySelectorAll("#quiz button");
+
+  buttons.forEach((btn, i) => {
+
+    btn.disabled = true;
+
+    if (currentOptions[i] === correct) {
+      btn.style.background = "#a8e6a3";
+    }
+
+    if (i === index && selected !== correct) {
+      btn.style.background = "#ffb3b3";
+    }
+
+  });
+
+  const feedback = document.getElementById("feedback");
+
+  if (selected === correct) {
+
+    score++;
+
+    feedback.innerText = "✓ Correct! Well done!";
+    feedback.style.color = "#218838";
+
+    playSound("correct");
+
+  } else {
+
+    feedback.innerText =
+      "✗ Not quite. Correct answer: " + correct;
+
+    feedback.style.color = "#d63031";
+
+    playSound("wrong");
+
+  }
+
+  document.getElementById("score").innerText =
+    "Score: " + score + " / 10";
+
+  document.getElementById("progressBar").style.width =
+    ((current + 1) / 10 * 100) + "%";
+
+  setTimeout(() => {
+
+    current++;
+    loadQuestion();
+
+  }, 1400);
+
+}
+
+
+// FINAL RESULT
+
+function showResult() {
+
+  document.getElementById("quiz").innerHTML = "";
+
+  document.getElementById("progressBar").style.width =
+    "100%";
+
+  const percentage = Math.round(score / 10 * 100);
+
+  let message = "";
+
+  if (percentage >= 90) {
+    message = "🏆 Excellent! Fantastic work!";
+  }
+  else if (percentage >= 70) {
+    message = "🌟 Very good! Keep it up!";
+  }
+  else if (percentage >= 50) {
+    message = "👏 Good effort! Practise more!";
+  }
+  else {
+    message = "💪 Keep practising. You can improve!";
+  }
+
+  document.getElementById("result").innerHTML = `
+
+    <div class="box">
+
+      <h2>🎉 Set ${currentSet + 1} Completed!</h2>
+
+      <h1>${score} / 10</h1>
+
+      <h3>${percentage}%</h3>
+
+      <p>${message}</p>
+
+      <button class="action" onclick="tryAgain()">
+        🔄 Try This Set Again
+      </button>
+
+      <button onclick="chooseSet()">
+        📚 Choose Another Set
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+
+// RESTART CURRENT SET
+
+function tryAgain() {
+
+  current = 0;
+  score = 0;
+
+  document.getElementById("result").innerHTML = "";
+
+  document.getElementById("score").innerText =
+    "Score: 0 / 10";
+
+  loadQuestion();
+
+}
+
+
+// CHOOSE ANOTHER SET
+
+function chooseSet() {
+
+  document.getElementById("game")
+    .classList.add("hidden");
+
+  document.getElementById("result").innerHTML = "";
+
+  document.getElementById("startBox")
+    .classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
